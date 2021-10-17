@@ -16,6 +16,7 @@ parameters:
 - name: environment
   type: string
 
+stages:
 - stage: ${{ parameters.stageId }}
   displayName: ${{ parameters.displayName }}
   dependsOn:
