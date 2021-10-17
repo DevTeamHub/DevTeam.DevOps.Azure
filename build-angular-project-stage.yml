@@ -23,7 +23,7 @@ stages:
           - template: build-npm-project.yml@templates
             parameters:
               project: ${{ parameters.project }}
-              workingDir: $(Pipeline.Workspace)\s
+              workingDir: $(Pipeline.Workspace)/s
             
           - template: pack-npm-project.yml@templates
             parameters:
