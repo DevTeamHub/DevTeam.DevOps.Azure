@@ -27,4 +27,5 @@ stages:
             
           - template: pack-npm-project.yml@templates
             parameters:
+              appName: ${{ parameters.project }}
               configPattern: 'main*.js'

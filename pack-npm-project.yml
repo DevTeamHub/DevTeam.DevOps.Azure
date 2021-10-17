@@ -1,4 +1,6 @@
 parameters:
+- name: appName
+  typpe: string
 - name: configPattern
   type: string
 
@@ -23,5 +25,5 @@ steps:
     rootFolderOrFile: '$(Pipeline.Workspace)/s/'
     includeRootFolder: false
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/package/${{ parameters.appName }}.zip'
     replaceExistingArchive: true
