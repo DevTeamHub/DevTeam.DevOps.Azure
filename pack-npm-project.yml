@@ -1,6 +1,6 @@
 parameters:
 - name: appName
-  typpe: string
+  type: string
 - name: configPattern
   type: string
 
