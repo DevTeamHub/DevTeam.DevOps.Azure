@@ -20,10 +20,12 @@ stages:
             inputs:
               versionSpec: '14.x'  
           
-          - template: build-npm-project.yml@templates
-            parameters:
-              project: ${{ parameters.project }}
-            
+          - script: npm install
+            displayName: 'Install Packages'
+
+          - script: npm run build:prod
+            displayName: 'Build'
+
           - template: pack-npm-project.yml@templates
             parameters:
               configPattern: 'main*.js'
