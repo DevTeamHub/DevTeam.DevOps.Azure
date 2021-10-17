@@ -1,0 +1,46 @@
+parameters:
+- name: stageId
+  type: string
+- name: displayName
+  type: string
+- name: appName
+  type: string
+- name: appPath
+  type: string
+- name: appEndpoint
+  type: string
+- name: projectName
+  type: string
+- name: environment
+  type: string
+- name: certificate
+  type: string
+- name: iisRoot
+  type: string
+
+stages:
+- stage: ${{ parameters.stageId }}
+    displayName: ${{ parameters.displayName }}
+    variables:
+      iisAppPath: ${{ parameters.projectName }}\${{ parameters.environment }}\${{ parameters.appName }}
+    dependsOn:
+      - build
+    condition: succeeded()
+    jobs:
+      - deployment: 
+        displayName: 'Deploy'
+        environment: 
+          name: ${{ parameters.environment }}
+          resourceType: VirtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: iis-deployment.yml@templates
+                  parameters:
+                    iisAppName: ${{ parameters.appName }}
+                    iisAppPath: ${{ parameters.iisAppPath }}
+                    iisRoot: ${{ parameters.iisRoot }}
+                    appEndpoint: ${{ parameters.appEndpoint }}
+                    environment: ${{ parameters.environment }}
+                    certificate: ${{ parameters.certificate }}
