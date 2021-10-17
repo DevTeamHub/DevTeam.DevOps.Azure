@@ -58,5 +58,6 @@ steps:
   displayName: 'Deploy'
   inputs:
     webSiteName: ${{ parameters.iisAppName }}.${{ parameters.environment }}
-    package: '$(Pipeline.Workspace)\package\${{ parameters.iisAppName }}.zip' 
+    package: '$(Pipeline.Workspace)\package\${{ parameters.iisAppName }}.zip'
+    removeAdditionalFilesFlag: true 
                 
