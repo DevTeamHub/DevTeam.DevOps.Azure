@@ -1,0 +1,29 @@
+parameters:
+- name: stageId
+  type: string
+- name: displayName
+  type: string
+- name: project
+  type: string
+
+stages:
+  - stage: ${{ parameters.stageId }}
+    displayName: ${{ parameters.displayName }}
+    pool:
+      vmImage: ubuntu-latest
+    jobs:
+      - job:
+        displayName: 'Execute'
+        steps:
+          - task: NodeTool@0
+            displayName: 'Install Node.js'
+            inputs:
+              versionSpec: '14.x'  
+          
+          - template: build-npm-project.yml@templates
+            parameters:
+              project: ${{ parameters.project }}
+            
+          - template: pack-npm-project.yml@templates
+            parameters:
+              configPattern: 'main*.js'
