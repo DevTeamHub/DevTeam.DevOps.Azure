@@ -19,8 +19,6 @@ parameters:
 stages:
 - stage: ${{ parameters.stageId }}
     displayName: ${{ parameters.displayName }}
-    variables:
-      iisAppPath: ${{ parameters.projectName }}\${{ parameters.environment }}\${{ parameters.appName }}
     dependsOn:
       - build
     condition: succeeded()
