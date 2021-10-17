@@ -20,12 +20,11 @@ stages:
             inputs:
               versionSpec: '14.x'  
           
-          - script: npm install
-            displayName: 'Install Packages'
-
-          - script: npm run build:prod
-            displayName: 'Build'
-
+          - template: build-npm-project.yml@templates
+            parameters:
+              project: ${{ parameters.project }}
+              workingDir: $(Pipeline.Workspace)\s\
+            
           - template: pack-npm-project.yml@templates
             parameters:
               configPattern: 'main*.js'

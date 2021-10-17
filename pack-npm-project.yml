@@ -6,7 +6,7 @@ steps:
 - task: replacetokens@3
   displayName: 'Configure'
   inputs:
-    targetFiles: '$(Pipeline.Workspace)/package/**/${{ parameters.configPattern }}'
+    targetFiles: '$(Pipeline.Workspace)/s/**/${{ parameters.configPattern }}'
     encoding: 'auto'
     writeBOM: true
     verbosity: 'detailed'
@@ -20,7 +20,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive'
   inputs:
-    rootFolderOrFile: '$(Pipeline.Workspace)/package/'
+    rootFolderOrFile: '$(Pipeline.Workspace)/s/'
     includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
