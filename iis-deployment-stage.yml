@@ -18,25 +18,25 @@ parameters:
 
 stages:
 - stage: ${{ parameters.stageId }}
-    displayName: ${{ parameters.displayName }}
-    dependsOn:
-      - build
-    condition: succeeded()
-    jobs:
-      - deployment: 
-        displayName: 'Deploy'
-        environment: 
-          name: ${{ parameters.environment }}
-          resourceType: VirtualMachine
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: iis-deployment.yml@templates
-                  parameters:
-                    iisAppName: ${{ parameters.appName }}
-                    iisAppPath: ${{ parameters.iisAppPath }}
-                    iisRoot: ${{ parameters.iisRoot }}
-                    appEndpoint: ${{ parameters.appEndpoint }}
-                    environment: ${{ parameters.environment }}
-                    certificate: ${{ parameters.certificate }}
+  displayName: ${{ parameters.displayName }}
+  dependsOn:
+    - build
+  condition: succeeded()
+  jobs:
+    - deployment: 
+      displayName: 'Deploy'
+      environment: 
+        name: ${{ parameters.environment }}
+        resourceType: VirtualMachine
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - template: iis-deployment.yml@templates
+                parameters:
+                  iisAppName: ${{ parameters.appName }}
+                  iisAppPath: ${{ parameters.iisAppPath }}
+                  iisRoot: ${{ parameters.iisRoot }}
+                  appEndpoint: ${{ parameters.appEndpoint }}
+                  environment: ${{ parameters.environment }}
+                  certificate: ${{ parameters.certificate }}
