@@ -35,7 +35,7 @@ stages:
               - template: iis-deployment.yml@templates
                 parameters:
                   iisAppName: ${{ parameters.appName }}
-                  iisAppPath: ${{ parameters.iisAppPath }}
+                  iisAppPath: ${{ parameters.appPath }}
                   iisRoot: ${{ parameters.iisRoot }}
                   appEndpoint: ${{ parameters.appEndpoint }}
                   environment: ${{ parameters.environment }}
