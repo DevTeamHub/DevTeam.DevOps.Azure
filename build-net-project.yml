@@ -1,0 +1,25 @@
+parameters:
+- name: netSdkVersion
+  type: string
+- name: solution
+  type: string
+- name: configuration
+  type: string
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Set .Net Core SDK'
+  inputs:
+    version: ${{ parameters.netSdkVersion }}
+    includePreviewVersions: true
+
+- task: NuGetToolInstaller@1
+  displayName: 'Install Nuget Tools'
+
+- task: NuGetCommand@2
+  displayName: 'Restore Nuget Packages'
+  inputs:
+    restoreSolution: ${{ parameters.solution }}
+
+- script: dotnet build --configuration ${{ parameters.configuration }}
+  displayName: 'Build .NET'
