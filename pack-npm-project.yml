@@ -25,5 +25,12 @@ steps:
     rootFolderOrFile: '$(Pipeline.Workspace)/s/'
     includeRootFolder: false
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/package/${{ parameters.appName }}.zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/${{ parameters.appName }}.zip'
     replaceExistingArchive: true
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish'
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)
+    artifactType: 'pipeline'
+    artifactName: 'package'
