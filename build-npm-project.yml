@@ -1,0 +1,17 @@
+parameters:
+- name: project
+  type: string
+
+steps:
+- task: Npm@1
+  displayName: '${{ parameters.project }} - Restore NPM Packages'
+  inputs:
+    command: 'install'
+    workingDir: '$(Pipeline.Workspace)\s\${{ parameters.project }}'
+
+- task: Npm@1
+  displayName: '${{ parameters.project }} - Build Client'
+  inputs:
+    command: 'custom'
+    workingDir: '$(Pipeline.Workspace)\s\${{ parameters.project }}'
+    customCommand: 'run build:prod'

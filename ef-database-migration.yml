@@ -1,0 +1,23 @@
+parameters:
+- name: project
+  type: string
+- name: server
+  type: string
+- name: database
+  type: string
+- name: username
+  type: string
+- name: password
+  type: string
+
+steps:
+- task: SqlDacpacDeploymentOnMachineGroup@0
+  displayName: 'Apply SQL Database Migrations'
+  inputs:
+    TaskType: sqlQuery
+    SqlFile: '$(Pipeline.Workspace)\package\${{ parameters.project }}\migrations.sql'
+    ServerName: ${{ parameters.server }}
+    DatabaseName: ${{ parameters.database }}
+    AuthScheme: sqlServerAuthentication
+    SqlUsername: ${{ parameters.username }}
+    SqlPassword: ${{ parameters.password }}

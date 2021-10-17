@@ -1,0 +1,25 @@
+parameters:
+- name: project
+  type: string
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'New Manifest for tool'
+  inputs:
+    command: custom
+    custom: 'new '
+    arguments: tool-manifest
+
+- task: DotNetCoreCLI@2
+  displayName: 'Install EF Tool'
+  inputs:
+    command: custom
+    custom: 'tool '
+    arguments: install dotnet-ef
+
+- task: DotNetCoreCLI@2
+  displayName: 'Generate DB Migration Script'
+  inputs:
+    command: 'custom'
+    custom: 'ef '
+    arguments: migrations script --idempotent --project $(Pipeline.Workspace)\s\${{ parameters.project }}\${{ parameters.project }}.csproj --output $(Build.ArtifactStagingDirectory)\${{ parameters.project }}\migrations.sql

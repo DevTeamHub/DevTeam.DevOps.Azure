@@ -1,0 +1,62 @@
+parameters:
+- name: iisAppName
+  type: string
+- name: iisAppPath
+  type: string
+- name: iisRoot
+  type: string
+- name: appEndpoint
+  type: string
+- name: environment
+  type: string
+- name: certificate
+  type: string
+
+steps:                
+- task: IISWebAppManagementOnMachineGroup@0
+  displayName: 'Prepare IIS'
+  inputs:            
+    IISDeploymentType: 'IISWebsite'
+    ActionIISWebsite: 'CreateOrUpdateWebsite'
+    WebsiteName: '${{ parameters.iisAppName }}.${{ parameters.environment }}'
+    WebsitePhysicalPath: '${{ parameters.iisRoot }}\${{ parameters.iisAppPath }}'
+    AddBinding: true
+    ParentWebsiteNameForVD: '${{ parameters.iisAppName }}.${{ parameters.environment }}'
+    VirtualPathForVD: '${{ parameters.iisAppPath }}'
+    ParentWebsiteNameForApplication: '${{ parameters.iisAppName }}.${{ parameters.environment }}'
+    VirtualPathForApplication: '${{ parameters.iisAppPath }}'
+    AppPoolName: '${{ parameters.iisAppName }}.${{ parameters.environment }}'
+    AppPoolNameForWebsite: '${{ parameters.iisAppName }}.${{ parameters.environment }}'
+    AppPoolNameForApplication: '${{ parameters.iisAppName }}.${{ parameters.environment }}'
+    CreateOrUpdateAppPoolForWebsite: true
+    CreateOrUpdateAppPoolForApplication: true
+    DotNetVersionForWebsite: No Managed Code
+    DotNetVersionForApplication: No Managed Code
+    DotNetVersion: No Managed Code
+    Bindings: |
+        {
+            bindings:[
+            {
+                "protocol":"http",
+                "ipAddress":"",
+                "hostname":"${{ parameters.appEndpoint }}",
+                "port":"80",
+                "sslThumbprint":"",
+                "sniFlag":false
+            },
+            {
+                "protocol":"https",
+                "ipAddress":"",
+                "hostname":"${{ parameters.appEndpoint }}",
+                "port":"443",
+                "sslThumbprint":"${{ parameters.certificate }}",
+                "sniFlag":true
+            }]
+        }
+
+- task: IISWebAppDeploymentOnMachineGroup@0
+  displayName: 'Deploy'
+  inputs:
+    webSiteName: ${{ parameters.iisAppName }}.${{ parameters.environment }}
+    package: '$(Pipeline.Workspace)\package\${{ parameters.iisAppName }}.zip' 
+                
