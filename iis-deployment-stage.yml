@@ -19,6 +19,8 @@ parameters:
 stages:
 - stage: ${{ parameters.stageId }}
   displayName: ${{ parameters.displayName }}
+  variables:
+    - group: ${{ parameters.environment }}
   dependsOn:
     - build
   condition: succeeded()
