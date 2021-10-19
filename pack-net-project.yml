@@ -7,12 +7,14 @@ parameters:
   type: string
 - name: configPattern
   type: string
+- name: workingDir
+  type: string
 
 steps:
 - task: replacetokens@3
   displayName: 'Configure'
   inputs:
-    targetFiles: '$(Pipeline.Workspace)/s/**/${{ parameters.configPattern }}'
+    targetFiles: '$(Pipeline.Workspace)/s/${{ parameters.workingDir }}/**/${{ parameters.configPattern }}'
     encoding: 'auto'
     writeBOM: true
     verbosity: 'detailed'
@@ -24,16 +26,10 @@ steps:
     enableTelemetry: true
 
 - task: DotNetCoreCLI@2
-  displayName: 'Publish'
+  displayName: 'Pack'
   inputs:
     command: publish
     publishWebProjects: True
     arguments: '--configuration ${{ parameters.configuration }} --framework ${{ parameters.netFrameworkVersion }} --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
-
-- task: PublishPipelineArtifact@1
-  displayName: 'Pack'
-  inputs:
-    targetPath: $(Build.ArtifactStagingDirectory)
-    artifactType: 'pipeline'
-    artifactName: 'package'
+    workingDirectory: ${{ parameters.workingDir }}

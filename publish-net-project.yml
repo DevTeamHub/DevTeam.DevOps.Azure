@@ -1,0 +1,26 @@
+parameters:
+- name: project
+  type: string
+- name: netFrameworkVersion
+  type: string
+- name: configuration
+  type: string
+- name: configPattern
+  type: string
+- name: workingDir
+  type: string
+
+steps:
+- template: pack-net-project.yml@templates
+  parameters: 
+    project: ${{ parameters.project }}
+    netFrameworkVersion: ${{ parameters.netFrameworkVersion }}
+    configuration: ${{ parameters.configuration }}
+    workingDir: ${{ parameters.workingDir }}
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Pack'
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)
+    artifactType: 'pipeline'
+    artifactName: 'package'

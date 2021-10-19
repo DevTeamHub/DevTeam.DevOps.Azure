@@ -1,6 +1,8 @@
 parameters:
 - name: project
   type: string
+- name: workingDir
+  type: string
 
 steps:
 - task: DotNetCoreCLI@2
@@ -22,4 +24,4 @@ steps:
   inputs:
     command: 'custom'
     custom: 'ef '
-    arguments: migrations script --idempotent --project $(Pipeline.Workspace)\s\${{ parameters.project }}\${{ parameters.project }}.csproj --output $(Build.ArtifactStagingDirectory)\${{ parameters.project }}\migrations.sql
+    arguments: migrations script --idempotent --project $(Pipeline.Workspace)\s\${{ parameters.workingDir }}\${{ parameters.project }}\${{ parameters.project }}.csproj --output $(Build.ArtifactStagingDirectory)\${{ parameters.project }}\migrations.sql

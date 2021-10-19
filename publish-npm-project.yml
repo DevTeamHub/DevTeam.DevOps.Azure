@@ -1,0 +1,18 @@
+parameters:
+- name: appName
+  type: string
+- name: configPattern
+  type: string
+
+steps:
+- template: pack-npm-project.yml@templates
+  parameters: 
+    appName: ${{ parameters.appName }}
+    configPattern: ${{ parameters.configPattern }}
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish'
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)
+    artifactType: 'pipeline'
+    artifactName: 'package'

@@ -20,17 +20,10 @@ steps:
     enableTelemetry: true
                 
 - task: ArchiveFiles@2
-  displayName: 'Archive'
+  displayName: 'Pack'
   inputs:
     rootFolderOrFile: '$(Pipeline.Workspace)/s/dist'
     includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/${{ parameters.appName }}.zip'
     replaceExistingArchive: true
-
-- task: PublishPipelineArtifact@1
-  displayName: 'Publish'
-  inputs:
-    targetPath: $(Build.ArtifactStagingDirectory)
-    artifactType: 'pipeline'
-    artifactName: 'package'

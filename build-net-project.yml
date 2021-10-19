@@ -5,6 +5,8 @@ parameters:
   type: string
 - name: configuration
   type: string
+- name: workingDir
+  type: string
 
 steps:
 - task: UseDotNet@2
@@ -21,5 +23,9 @@ steps:
   inputs:
     restoreSolution: ${{ parameters.solution }}
 
-- script: dotnet build --configuration ${{ parameters.configuration }}
+- task: DotNetCoreCLI@2
   displayName: 'Build .NET'
+  inputs:
+    command: build
+    arguments: '--configuration ${{ parameters.configuration }}'
+    workingDirectory: ${{ parameters.workingDir }}

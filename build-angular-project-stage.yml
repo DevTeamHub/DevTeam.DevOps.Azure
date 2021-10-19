@@ -25,7 +25,7 @@ stages:
               project: ${{ parameters.project }}
               workingDir: $(Pipeline.Workspace)/s
             
-          - template: pack-npm-project.yml@templates
+          - template: publish-npm-project.yml@templates
             parameters:
               appName: ${{ parameters.project }}
               configPattern: 'main*.js'
