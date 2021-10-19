@@ -15,9 +15,15 @@ parameters:
   type: string
 - name: iisRoot
   type: string
+- name: netFrameworkVersion
+  type: string
+- name: configuration
+  type: string
+- name: configPattern
+  type: string
 
 jobs:
-- deployment: 
+- deployment: ${{ parameters.jobId }}
   displayName: ${{ parameters.displayName }}
   environment: 
     name: ${{ parameters.environment }}
@@ -26,6 +32,13 @@ jobs:
     runOnce:
       deploy:
         steps:
+          - template: pack-net-project.yml@templates
+            parameters:
+              project: ${{ parameters.appName }}
+              netFrameworkVersion: $(NetFrameworkVersion)
+              configuration: $(Configuration)
+              configPattern: $(AppSettingsPattern)
+
           - template: iis-deployment.yml@templates
             parameters:
               iisAppName: ${{ parameters.appName }}
