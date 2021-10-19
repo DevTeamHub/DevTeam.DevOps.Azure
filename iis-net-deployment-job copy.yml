@@ -35,9 +35,9 @@ jobs:
           - template: pack-net-project.yml@templates
             parameters:
               project: ${{ parameters.appName }}
-              netFrameworkVersion: $(NetFrameworkVersion)
-              configuration: $(Configuration)
-              configPattern: $(AppSettingsPattern)
+              netFrameworkVersion: ${{ parameters.netFrameworkVersion }}
+              configuration: ${{ parameters.configuration }}
+              configPattern: ${{ parameters.configPattern }}
 
           - template: iis-deployment.yml@templates
             parameters:

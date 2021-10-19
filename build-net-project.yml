@@ -18,10 +18,11 @@ steps:
 - task: NuGetToolInstaller@1
   displayName: 'Install Nuget Tools'
 
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
   displayName: 'Restore Nuget Packages'
   inputs:
-    restoreSolution: ${{ parameters.solution }}
+    command: 'restore'
+    projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build .NET'
