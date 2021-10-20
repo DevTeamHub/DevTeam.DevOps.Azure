@@ -1,6 +1,8 @@
 parameters:
 - name: appName
   type: string
+- name: projectName
+  type: string
 - name: configPattern
   type: string
 
@@ -22,7 +24,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Pack'
   inputs:
-    rootFolderOrFile: '$(Pipeline.Workspace)/${{ parameters.appName }}'
+    rootFolderOrFile: '$(Pipeline.Workspace)/${{ parameters.appName }}/${{ parameters.projectName }}'
     includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/${{ parameters.appName }}/${{ parameters.appName }}.zip'

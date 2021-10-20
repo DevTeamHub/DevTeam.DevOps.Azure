@@ -9,6 +9,8 @@ parameters:
   type: string
 - name: appEndpoint
   type: string
+- name: projectName
+  type: string
 - name: environment
   type: string
 - name: certificate
@@ -31,6 +33,7 @@ jobs:
           - template: pack-project.yml@templates
             parameters:
               appName: ${{ parameters.appName }}
+              projectName: ${{ parameters.projectName }}
               configPattern: ${{ parameters.configPattern }}
 
           - template: iis-deployment.yml@templates
