@@ -21,7 +21,7 @@ steps:
     workingDir: ${{ parameters.workingDir }}
 
 - task: DotNetCoreCLI@2
-  displayName: 'Pack'
+  displayName: 'Publish'
   inputs:
     command: publish
     publishWebProjects: True

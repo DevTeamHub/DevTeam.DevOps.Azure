@@ -8,7 +8,7 @@ steps:
 - task: replacetokens@3
   displayName: 'Configure'
   inputs:
-    targetFiles: '$(Pipeline.Workspace)/s/**/${{ parameters.configPattern }}'
+    targetFiles: '$(Pipeline.Workspace)/${{ parameters.appName }}/**/${{ parameters.configPattern }}'
     encoding: 'auto'
     writeBOM: true
     verbosity: 'detailed'
@@ -22,8 +22,8 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Pack'
   inputs:
-    rootFolderOrFile: '$(Pipeline.Workspace)/s/dist'
+    rootFolderOrFile: '${{ parameters.appName }}'
     includeRootFolder: false
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/${{ parameters.appName }}.zip'
+    archiveFile: '$(Pipeline.Workspace)/${{ parameters.appName }}/${{ parameters.appName }}.zip'
     replaceExistingArchive: true

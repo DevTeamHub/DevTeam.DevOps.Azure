@@ -1,0 +1,35 @@
+parameters:
+- name: jobId
+  type: string
+- name: displayName
+  type: string
+- name: project
+  type: string
+- name: server
+  type: string
+- name: database
+  type: string
+- name: username
+  type: string
+- name: password
+  type: string
+- name: environment
+  type: string
+
+- deployment: jobId
+  displayName: ${{ parameters.displayName }}
+  environment: 
+    name: ${{ parameters.environment }}
+    resourceType: VirtualMachine
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+          - template: ef-database-migration.yml@templates 
+            parameters:
+              project: ${{ parameters.project }}
+              server: ${{ parameters.server }}
+              database: ${{ parameters.database }}
+              username: ${{ parameters.username }}
+              password: ${{ parameters.password }}
+    

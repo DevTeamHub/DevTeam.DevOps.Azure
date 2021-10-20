@@ -7,14 +7,12 @@ parameters:
   type: string
 - name: configPattern
   type: string
-- name: workingDir
-  type: string
 
 steps:
 - task: replacetokens@3
   displayName: 'Configure'
   inputs:
-    targetFiles: '$(Pipeline.Workspace)/s/${{ parameters.workingDir }}/**/${{ parameters.configPattern }}'
+    targetFiles: '$(Pipeline.Workspace)/${{ parameters.project }}/**/${{ parameters.configPattern }}'
     encoding: 'auto'
     writeBOM: true
     verbosity: 'detailed'
@@ -30,6 +28,6 @@ steps:
   inputs:
     command: publish
     publishWebProjects: True
-    arguments: '--configuration ${{ parameters.configuration }} --framework ${{ parameters.netFrameworkVersion }} --output $(Build.ArtifactStagingDirectory)'
+    arguments: '--configuration ${{ parameters.configuration }} --framework ${{ parameters.netFrameworkVersion }} --output $(Pipeline.Workspace)/${{ parameters.project }}'
     zipAfterPublish: True
-    workingDirectory: ${{ parameters.workingDir }}
+    workingDirectory: $(Pipeline.Workspace)/${{ parameters.project }}
