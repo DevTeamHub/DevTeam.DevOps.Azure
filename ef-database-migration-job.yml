@@ -16,6 +16,7 @@ parameters:
 - name: environment
   type: string
 
+jobs:
 - deployment: jobId
   displayName: ${{ parameters.displayName }}
   environment: 
