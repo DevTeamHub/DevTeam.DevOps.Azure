@@ -1,18 +1,18 @@
 parameters:
-- name: project
+- name: appName
   type: string
 - name: workingDir
   type: string
 
 steps:
 - task: Npm@1
-  displayName: '${{ parameters.project }} - Restore NPM Packages'
+  displayName: '${{ parameters.appName }} - Restore NPM Packages'
   inputs:
     command: 'install'
     workingDir: ${{ parameters.workingDir }}
 
 - task: Npm@1
-  displayName: '${{ parameters.project }} - Build Client'
+  displayName: '${{ parameters.appName }} - Build Client'
   inputs:
     command: 'custom'
     workingDir: ${{ parameters.workingDir }}
