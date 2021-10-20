@@ -1,0 +1,18 @@
+parameters:
+- name: project
+  type: string
+- name: workingDir
+  type: string
+
+steps:
+- template: build-ef-project.yml@templates
+  parameters: 
+    project: ${{ parameters.project }}
+    workingDir: ${{ parameters.workingDir }}
+
+- task: PublishPipelineArtifact@1
+  displayName: '${{ parameters.project }} - Publish'
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)\${{ parameters.project }}\migrations.sql
+    artifactType: 'pipeline'
+    artifactName: ${{ parameters.project }}

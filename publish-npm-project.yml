@@ -1,18 +1,20 @@
 parameters:
 - name: appName
   type: string
-- name: configPattern
+- name: workingDir
+  type: string
+- name: destination
   type: string
 
 steps:
-- template: pack-npm-project.yml@templates
+- template: build-npm-project.yml@templates
   parameters: 
     appName: ${{ parameters.appName }}
-    configPattern: ${{ parameters.configPattern }}
+    workingDir: ${{ parameters.workingDir }}
 
 - task: PublishPipelineArtifact@1
-  displayName: 'Publish'
+  displayName: '${{ parameters.appName }} - Publish'
   inputs:
-    targetPath: $(Build.ArtifactStagingDirectory)
+    targetPath: ${{ parameters.workingDir }}\${{ parameters.destination }}
     artifactType: 'pipeline'
-    artifactName: 'package'
+    artifactName: ${{ parameters.appName }}

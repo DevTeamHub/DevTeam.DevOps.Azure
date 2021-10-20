@@ -3,24 +3,35 @@ parameters:
   type: string
 - name: netFrameworkVersion
   type: string
-- name: configuration
+- name: netSdkVersion
   type: string
-- name: configPattern
+- name: solution
+  type: string
+- name: configuration
   type: string
 - name: workingDir
   type: string
 
 steps:
-- template: pack-net-project.yml@templates
+- template: build-net-project.yml@templates
   parameters: 
-    project: ${{ parameters.project }}
-    netFrameworkVersion: ${{ parameters.netFrameworkVersion }}
+    netSdkVersion: ${{ parameters.netSdkVersion }}
+    solution: ${{ parameters.solution }}
     configuration: ${{ parameters.configuration }}
     workingDir: ${{ parameters.workingDir }}
+
+- task: DotNetCoreCLI@2
+  displayName: 'Pack'
+  inputs:
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration ${{ parameters.configuration }} --framework ${{ parameters.netFrameworkVersion }} --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: False
+    workingDirectory: ${{ parameters.workingDir }}
 
 - task: PublishPipelineArtifact@1
   displayName: 'Pack'
   inputs:
     targetPath: $(Build.ArtifactStagingDirectory)
     artifactType: 'pipeline'
-    artifactName: 'package'
+    artifactName: ${{ parameters.project }}
