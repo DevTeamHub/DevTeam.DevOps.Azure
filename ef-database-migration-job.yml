@@ -17,7 +17,7 @@ parameters:
   type: string
 
 jobs:
-- deployment: jobId
+- deployment: ${{ parameters.jobId }}
   displayName: ${{ parameters.displayName }}
   environment: 
     name: ${{ parameters.environment }}

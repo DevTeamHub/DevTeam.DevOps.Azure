@@ -15,7 +15,7 @@ steps:
   displayName: 'Apply SQL Database Migrations'
   inputs:
     TaskType: sqlQuery
-    SqlFile: '$(Pipeline.Workspace)\package\${{ parameters.project }}\migrations.sql'
+    SqlFile: '$(Pipeline.Workspace)\${{ parameters.project }}\migrations.sql'
     ServerName: ${{ parameters.server }}
     DatabaseName: ${{ parameters.database }}
     AuthScheme: sqlServerAuthentication
