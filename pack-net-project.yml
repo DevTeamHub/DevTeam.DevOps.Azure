@@ -28,6 +28,6 @@ steps:
   inputs:
     command: publish
     publishWebProjects: True
-    arguments: '--configuration ${{ parameters.configuration }} --framework ${{ parameters.netFrameworkVersion }} --output $(Pipeline.Workspace)/${{ parameters.project }}'
+    arguments: '--configuration ${{ parameters.configuration }} --framework ${{ parameters.netFrameworkVersion }} --output $(Build.ArtifactStagingDirectory)/${{ parameters.project }}'
     zipAfterPublish: True
     workingDirectory: $(Pipeline.Workspace)/${{ parameters.project }}
