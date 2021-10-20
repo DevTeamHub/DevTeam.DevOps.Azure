@@ -11,6 +11,7 @@ parameters:
   type: string
 - name: projectName
   type: string
+  default: ''
 - name: environment
   type: string
 - name: certificate
