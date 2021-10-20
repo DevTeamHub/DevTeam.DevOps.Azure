@@ -15,10 +15,6 @@ parameters:
   type: string
 - name: iisRoot
   type: string
-- name: netFrameworkVersion
-  type: string
-- name: configuration
-  type: string
 - name: configPattern
   type: string
 
@@ -32,11 +28,9 @@ jobs:
     runOnce:
       deploy:
         steps:
-          - template: pack-net-project.yml@templates
+          - template: pack-project.yml@templates
             parameters:
-              project: ${{ parameters.appName }}
-              netFrameworkVersion: ${{ parameters.netFrameworkVersion }}
-              configuration: ${{ parameters.configuration }}
+              appName: ${{ parameters.appName }}
               configPattern: ${{ parameters.configPattern }}
 
           - template: iis-deployment.yml@templates
