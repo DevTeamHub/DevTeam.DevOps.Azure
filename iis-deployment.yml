@@ -54,10 +54,22 @@ steps:
             }]
         }
 
+- task: IISWebAppManagementOnMachineGroup@0
+  inputs:
+    IISDeploymentType: 'IISApplicationPool'
+    ActionIISApplicationPool: 'StopAppPool'
+    StartStopRecycleAppPoolName: '${{ parameters.iisAppName }}.${{ parameters.environment }}'
+
 - task: IISWebAppDeploymentOnMachineGroup@0
   displayName: 'Deploy'
   inputs:
     webSiteName: ${{ parameters.iisAppName }}.${{ parameters.environment }}
     package: '$(Build.ArtifactStagingDirectory)\${{ parameters.iisAppName }}\${{ parameters.iisAppName }}.zip'
     removeAdditionalFilesFlag: true 
+
+- task: IISWebAppManagementOnMachineGroup@0
+  inputs:
+    IISDeploymentType: 'IISApplicationPool'
+    ActionIISApplicationPool: 'StartAppPool'
+    StartStopRecycleAppPoolName: '${{ parameters.iisAppName }}.${{ parameters.environment }}'
                 
