@@ -23,5 +23,5 @@ stages:
           - template: publish-npm-project.yml@templates
             parameters:
               appName: ${{ parameters.project }}
-              workingDir: $(Pipeline.Workspace)/s
+              workingDir: $(Pipeline.Workspace)\s
               destination: 'dist'
