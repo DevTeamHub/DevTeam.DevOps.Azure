@@ -10,7 +10,7 @@ stages:
   - stage: ${{ parameters.stageId }}
     displayName: ${{ parameters.displayName }}
     pool:
-      vmImage: ubuntu-latest
+      vmImage: windows-latest
     jobs:
       - job:
         displayName: 'Execute'
