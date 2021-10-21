@@ -20,12 +20,8 @@ stages:
             inputs:
               versionSpec: '14.x'  
           
-          - template: build-npm-project.yml@templates
+          - template: publish-npm-project.yml@templates
             parameters:
               project: ${{ parameters.project }}
               workingDir: $(Pipeline.Workspace)/s
-            
-          - template: publish-npm-project.yml@templates
-            parameters:
-              appName: ${{ parameters.project }}
-              configPattern: 'main*.js'
+              destination: 'dist'

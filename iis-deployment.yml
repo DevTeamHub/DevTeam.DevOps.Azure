@@ -14,7 +14,7 @@ parameters:
 
 steps:                
 - task: IISWebAppManagementOnMachineGroup@0
-  displayName: 'Prepare IIS'
+  displayName: 'Prepare IIS Web Site'
   inputs:            
     IISDeploymentType: 'IISWebsite'
     ActionIISWebsite: 'CreateOrUpdateWebsite'
@@ -55,6 +55,7 @@ steps:
         }
 
 - task: IISWebAppManagementOnMachineGroup@0
+  displayName: 'Stop IIS Web Site'
   inputs:
     IISDeploymentType: 'IISApplicationPool'
     ActionIISApplicationPool: 'StopAppPool'
@@ -68,6 +69,7 @@ steps:
     removeAdditionalFilesFlag: true 
 
 - task: IISWebAppManagementOnMachineGroup@0
+  displayName: 'Start IIS Web Site'
   inputs:
     IISDeploymentType: 'IISApplicationPool'
     ActionIISApplicationPool: 'StartAppPool'
