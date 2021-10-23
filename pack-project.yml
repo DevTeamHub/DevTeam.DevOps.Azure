@@ -24,7 +24,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Pack'
   inputs:
-    rootFolderOrFile: '$(Pipeline.Workspace)/${{ parameters.appName }}/${{ parameters.projectName }}'
+    rootFolderOrFile: '$(Pipeline.Workspace)/${{ parameters.projectName }}/${{ parameters.appName }}'
     includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/${{ parameters.appName }}/${{ parameters.appName }}.zip'
