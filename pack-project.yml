@@ -10,7 +10,7 @@ steps:
 - task: replacetokens@3
   displayName: 'Configure'
   inputs:
-    targetFiles: '$(Pipeline.Workspace)/${{ parameters.appName }}/**/${{ parameters.configPattern }}'
+    targetFiles: '$(Pipeline.Workspace)/${{ parameters.projectName }}/${{ parameters.appName }}/**/${{ parameters.configPattern }}'
     encoding: 'auto'
     writeBOM: true
     verbosity: 'detailed'
