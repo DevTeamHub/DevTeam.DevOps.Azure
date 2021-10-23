@@ -11,6 +11,7 @@ parameters:
   type: string
 - name: workingDir
   type: string
+  default: ''
 
 steps:
 - template: build-net-project.yml@templates
