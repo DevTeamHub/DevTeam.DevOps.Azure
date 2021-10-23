@@ -9,8 +9,6 @@ parameters:
 stages:
   - stage: ${{ parameters.stageId }}
     displayName: ${{ parameters.displayName }}
-    pool:
-      vmImage: windows-latest
     jobs:
       - job:
         displayName: 'Execute'
