@@ -30,6 +30,7 @@ steps:
     workingDirectory: ${{ parameters.workingDir }}
   
 - task: DotNetCoreCLI@2
+  displayName: 'Testing'
   inputs:
     command: test
     projects: '**/*Tests/*.csproj'
