@@ -28,3 +28,9 @@ steps:
     command: build
     arguments: '--configuration ${{ parameters.configuration }}'
     workingDirectory: ${{ parameters.workingDir }}
+  
+- task: DotNetCoreCLI@2
+  inputs:
+    command: test
+    projects: '**/*Tests/*.csproj'
+    arguments: '--configuration ${{ parameters.configuration }}'
