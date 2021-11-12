@@ -18,7 +18,7 @@ steps:
 - task: PowerShell@2
   displayName: 'Backup Database'
   inputs:
-    script: 'SqlCmd -S ${{ parameters.server }} -U "${{ parameters.username }}" -P "${{ parameters.password }}"  -Q "BACKUP DATABASE ${{ parameters.database }} TO DISK='${{ parameters.backupPath }}\${{ parameters.database }}\${{ parameters.buildId }}.bak'"'
+    script: 'SqlCmd -S ${{ parameters.server }} -U "${{ parameters.username }}" -P "${{ parameters.password }}" -Q "BACKUP DATABASE [${{ parameters.database }}] TO DISK=${{ parameters.backupPath }}\${{ parameters.database }}\${{ parameters.buildId }}.bak"'
 
 - task: SqlDacpacDeploymentOnMachineGroup@0
   displayName: 'Apply SQL Database Migrations'
