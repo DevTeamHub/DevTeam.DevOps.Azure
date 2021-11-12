@@ -11,6 +11,8 @@ parameters:
   type: string
 - name: password
   type: string
+- name: backupPath
+  type: string
 
 steps:
 - task: PowerShell@2
