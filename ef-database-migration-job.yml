@@ -1,6 +1,8 @@
 parameters:
 - name: jobId
   type: string
+- name: buildId
+  type: string
 - name: displayName
   type: string
 - name: project
@@ -12,6 +14,8 @@ parameters:
 - name: username
   type: string
 - name: password
+  type: string
+- name: backupPath
   type: string
 - name: environment
   type: string
@@ -28,9 +32,11 @@ jobs:
         steps:
           - template: ef-database-migration.yml@templates 
             parameters:
+              buildId: ${{ parameters.buildId }}
               project: ${{ parameters.project }}
               server: ${{ parameters.server }}
               database: ${{ parameters.database }}
               username: ${{ parameters.username }}
               password: ${{ parameters.password }}
+              backupPath: ${{ parameters.backupPath }}
     
