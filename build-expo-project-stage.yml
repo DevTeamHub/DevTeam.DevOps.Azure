@@ -17,9 +17,8 @@ stages:
             displayName: 'Install Node.js'
             inputs:
               versionSpec: '14.x'  
-          
-          - template: publish-npm-project.yml@templates
-            parameters:
+
+          - template: build-npm-project.yml@templates
+            parameters: 
               appName: ${{ parameters.project }}
               workingDir: $(Pipeline.Workspace)\s
-              destination: 'dist'
