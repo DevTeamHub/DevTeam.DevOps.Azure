@@ -1,0 +1,25 @@
+parameters:
+- name: stageId
+  type: string
+- name: displayName
+  type: string
+- name: project
+  type: string
+
+stages:
+  - stage: ${{ parameters.stageId }}
+    displayName: ${{ parameters.displayName }}
+    jobs:
+      - job:
+        displayName: 'Execute'
+        steps:
+          - task: NodeTool@0
+            displayName: 'Install Node.js'
+            inputs:
+              versionSpec: '14.x'  
+          
+          - template: publish-npm-project.yml@templates
+            parameters:
+              appName: ${{ parameters.project }}
+              workingDir: $(Pipeline.Workspace)\s
+              destination: 'dist'
