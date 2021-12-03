@@ -13,6 +13,11 @@ stages:
       - job:
         displayName: 'Execute'
         steps:
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: 'env | sort'
+
           - task: NodeTool@0
             displayName: 'Install Node.js'
             inputs:
