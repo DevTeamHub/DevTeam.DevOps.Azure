@@ -1,0 +1,111 @@
+parameters:
+- name: environment
+  type: string
+- name: workingDir
+  type: string
+- name: configPattern
+  type: string
+
+stages:
+  - stage: buildExpo
+    displayName: 'Prepare Expo Project'
+    jobs:
+      - job:
+        displayName: 'Build Expo'
+        steps:
+          - task: NodeTool@0
+            displayName: 'Install Node.js'
+            inputs:
+              versionSpec: '14.x'  
+
+          - task: Npm@1
+            displayName: 'Restore NPM Packages'
+            inputs:
+              command: 'install'
+              workingDir: ${{ parameters.workingDir }}
+
+          - task: replacetokens@3
+            displayName: 'Configure'
+            inputs:
+              targetFiles: '$(Pipeline.Workspace)/**/${{ parameters.configPattern }}'
+              encoding: 'auto'
+              writeBOM: true
+              verbosity: 'detailed'
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '#{'
+              tokenSuffix: '}#'
+              useLegacyPattern: false
+              enableTelemetry: true
+
+          - task: Npm@1
+            displayName: 'Build iOS App'
+            inputs:
+              command: 'custom'
+              workingDir: ${{ parameters.workingDir }}
+              customCommand: 'run build:ios'
+
+  - stage: buildNative
+    displayName: 'Build Native Apps'
+    dependsOn:
+      - buildExpo
+    jobs:
+      - job:
+        displayName: 'Build Android App'
+        steps:
+          - task: Npm@1
+            displayName: 'Send to Expo'
+            inputs:
+              command: 'custom'
+              workingDir: ${{ parameters.workingDir }}
+              customCommand: 'run build:android'
+
+      - job:
+        displayName: 'Build iOS App'
+        steps:
+          - task: Npm@1
+            displayName: 'Send to Expo'
+            inputs:
+              command: 'custom'
+              workingDir: ${{ parameters.workingDir }}
+              customCommand: 'run build:android'
+
+  - stage: deploy
+    displayName: 'Deploy Expo Apps'
+    dependsOn:
+      - buildNative
+    condition: succeeded()
+    jobs:
+      - deployment:
+        displayName: 'Deploy Android App'
+        environment: 
+          name: ${{ parameters.environment }}
+          resourceType: VirtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: Npm@1
+                  displayName: 'Deploy to Google Play'
+                  inputs:
+                    command: 'custom'
+                    workingDir: ${{ parameters.workingDir }}
+                    customCommand: 'run deploy:android'
+
+      - deployment:
+        displayName: 'Deploy iOS App'
+        environment: 
+          name: ${{ parameters.environment }}
+          resourceType: VirtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: Npm@1
+                  displayName: 'Deploy to Apple App Store'
+                  inputs:
+                    command: 'custom'
+                    workingDir: ${{ parameters.workingDir }}
+                    customCommand: 'run deploy:ios'
+          
+  
