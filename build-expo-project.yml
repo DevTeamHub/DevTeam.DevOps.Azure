@@ -42,8 +42,9 @@ stages:
           - task: Npm@1
             displayName: 'Install EAS'
             inputs:
-              command: 'install -g eas-cli'
+              command: 'custom'
               workingDir: ${{ parameters.workingDir }}
+              customCommand: 'install -g eas-cli'
 
           - publish: ${{ parameters.workingDir }}
             artifact: ExpoApp
