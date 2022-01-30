@@ -18,12 +18,6 @@ stages:
             inputs:
               versionSpec: '14.x'  
 
-          - task: Npm@1
-            displayName: 'Restore NPM Packages'
-            inputs:
-              command: 'install'
-              workingDir: ${{ parameters.workingDir }}
-
           - task: replacetokens@3
             displayName: 'Configure'
             inputs:
@@ -39,11 +33,10 @@ stages:
               enableTelemetry: true
 
           - task: Npm@1
-            displayName: 'Build iOS App'
+            displayName: 'Restore NPM Packages'
             inputs:
-              command: 'custom'
+              command: 'install'
               workingDir: ${{ parameters.workingDir }}
-              customCommand: 'run build:ios'
 
   - stage: buildNative
     displayName: 'Build Native Apps'
