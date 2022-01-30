@@ -1,4 +1,8 @@
 parameters:
+- name: username
+  type: string
+- name: password
+  type: string
 - name: environment
   type: string
 - name: workingDir
@@ -6,7 +10,7 @@ parameters:
 
 stages:
   - stage: buildExpo
-    displayName: 'Prepare Expo Project'
+    displayName: 'Build Expo Project'
     jobs:
       - job:
         displayName: 'Build Expo'
@@ -22,7 +26,7 @@ stages:
               targetFiles: |
                 **/*.json
                 **/*.config.js
-                **/.env.*'
+                **/*env*'
               encoding: 'auto'
               writeBOM: true
               verbosity: 'detailed'
@@ -39,12 +43,8 @@ stages:
               command: 'install'
               workingDir: ${{ parameters.workingDir }}
 
-          - task: Npm@1
-            displayName: 'Install EAS'
-            inputs:
-              command: 'custom'
-              workingDir: ${{ parameters.workingDir }}
-              customCommand: 'install -g eas-cli'
+          - script: npx expo login -u ${{ parameters.username }} -p ${{ parameters.password }}
+            displayName: 'Expo Login'
 
           - task: Npm@1
             displayName: 'Build Android'
@@ -60,48 +60,20 @@ stages:
               workingDir: ${{ parameters.workingDir }}
               customCommand: 'run build:ios'
 
-  - stage: deploy
-    displayName: 'Deploy Native Apps'
-    dependsOn:
-      - buildExpo
-    condition: succeeded()
-    jobs:
-      - deployment:
-        displayName: 'Deploy Android App'
-        environment: 
-          name: ${{ parameters.environment }}
-          resourceType: VirtualMachine
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - download: current
-                  artifact: ExpoApp
+           - task: Npm@1
+              displayName: 'Deploy to Google Play'
+              inputs:
+                command: 'custom'
+                workingDir: ${{ parameters.workingDir }}
+                customCommand: 'run deploy:android'               
 
-                - task: Npm@1
-                  displayName: 'Deploy to Google Play'
-                  inputs:
-                    command: 'custom'
-                    workingDir: '$(Pipeline.Workspace)\ExpoApp'
-                    customCommand: 'run deploy:android'
+            - task: Npm@1
+                displayName: 'Deploy to Apple App Store'
+                inputs:
+                  command: 'custom'
+                  workingDir: ${{ parameters.workingDir }}
+                  customCommand: 'run deploy:ios'
 
-      - deployment:
-        displayName: 'Deploy iOS App'
-        environment: 
-          name: ${{ parameters.environment }}
-          resourceType: VirtualMachine
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - download: current
-                  artifact: ExpoApp
-
-                - task: Npm@1
-                  displayName: 'Deploy to Apple App Store'
-                  inputs:
-                    command: 'custom'
-                    workingDir: '$(Pipeline.Workspace)\ExpoApp'
-                    customCommand: 'run deploy:ios'
+                
           
   
