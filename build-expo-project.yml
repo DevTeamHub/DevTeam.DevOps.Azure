@@ -60,19 +60,19 @@ stages:
               workingDir: ${{ parameters.workingDir }}
               customCommand: 'run build:ios'
 
-           - task: Npm@1
-              displayName: 'Deploy to Google Play'
-              inputs:
-                command: 'custom'
-                workingDir: ${{ parameters.workingDir }}
-                customCommand: 'run deploy:android'               
+          - task: Npm@1
+            displayName: 'Deploy to Google Play'
+            inputs:
+              command: 'custom'
+              workingDir: ${{ parameters.workingDir }}
+              customCommand: 'run deploy:android'               
 
-            - task: Npm@1
-                displayName: 'Deploy to Apple App Store'
-                inputs:
-                  command: 'custom'
-                  workingDir: ${{ parameters.workingDir }}
-                  customCommand: 'run deploy:ios'
+          - task: Npm@1
+            displayName: 'Deploy to Apple App Store'
+            inputs:
+              command: 'custom'
+              workingDir: ${{ parameters.workingDir }}
+              customCommand: 'run deploy:ios'
 
                 
           
