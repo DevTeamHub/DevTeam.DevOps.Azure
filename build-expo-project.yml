@@ -46,45 +46,24 @@ stages:
               workingDir: ${{ parameters.workingDir }}
               customCommand: 'install -g eas-cli'
 
-          - publish: ${{ parameters.workingDir }}
-            artifact: ExpoApp
-
-  - stage: buildNative
-    displayName: 'Build Native Apps'
-    dependsOn:
-      - buildExpo
-    condition: succeeded()
-    jobs:
-      - job:
-        displayName: 'Build Android App'
-        steps:
-          - download: current
-            artifact: ExpoApp
-
           - task: Npm@1
-            displayName: 'Send to Expo'
+            displayName: 'Build Android'
             inputs:
               command: 'custom'
-              workingDir: '$(Pipeline.Workspace)\ExpoApp'
+              workingDir: ${{ parameters.workingDir }}
               customCommand: 'run build:android'
-
-      - job:
-        displayName: 'Build iOS App'
-        steps:
-          - download: current
-            artifact: ExpoApp
 
           - task: Npm@1
-            displayName: 'Send to Expo'
+            displayName: 'Build iOS'
             inputs:
               command: 'custom'
-              workingDir: '$(Pipeline.Workspace)\ExpoApp'
-              customCommand: 'run build:android'
+              workingDir: ${{ parameters.workingDir }}
+              customCommand: 'run build:ios'
 
   - stage: deploy
     displayName: 'Deploy Native Apps'
     dependsOn:
-      - buildNative
+      - buildExpo
     condition: succeeded()
     jobs:
       - deployment:
