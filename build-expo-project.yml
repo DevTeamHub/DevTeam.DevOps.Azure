@@ -20,9 +20,9 @@ stages:
             displayName: 'Configure'
             inputs:
               targetFiles: |
-                '$(Pipeline.Workspace)/**/*.json'
-                '$(Pipeline.Workspace)/app.config.js'
-                '$(Pipeline.Workspace)/.env.*'
+                **/*.json
+                **/*.config.js
+                **/.env.*'
               encoding: 'auto'
               writeBOM: true
               verbosity: 'detailed'
