@@ -3,8 +3,6 @@ parameters:
   type: string
 - name: workingDir
   type: string
-- name: configPattern
-  type: string
 
 stages:
   - stage: buildExpo
@@ -21,7 +19,10 @@ stages:
           - task: replacetokens@3
             displayName: 'Configure'
             inputs:
-              targetFiles: '$(Pipeline.Workspace)/**/${{ parameters.configPattern }}'
+              targetFiles: |
+                '$(Pipeline.Workspace)/**/*.json'
+                '$(Pipeline.Workspace)/app.config.js'
+                '$(Pipeline.Workspace)/.env.*'
               encoding: 'auto'
               writeBOM: true
               verbosity: 'detailed'
@@ -38,33 +39,49 @@ stages:
               command: 'install'
               workingDir: ${{ parameters.workingDir }}
 
+          - task: Npm@1
+            displayName: 'Install EAS'
+            inputs:
+              command: 'install -g eas-cli'
+              workingDir: ${{ parameters.workingDir }}
+
+          - publish: ${{ parameters.workingDir }}
+            artifact: ExpoApp
+
   - stage: buildNative
     displayName: 'Build Native Apps'
     dependsOn:
       - buildExpo
+    condition: succeeded()
     jobs:
       - job:
         displayName: 'Build Android App'
         steps:
+          - download: current
+            artifact: ExpoApp
+
           - task: Npm@1
             displayName: 'Send to Expo'
             inputs:
               command: 'custom'
-              workingDir: ${{ parameters.workingDir }}
+              workingDir: '$(Pipeline.Workspace)\ExpoApp'
               customCommand: 'run build:android'
 
       - job:
         displayName: 'Build iOS App'
         steps:
+          - download: current
+            artifact: ExpoApp
+
           - task: Npm@1
             displayName: 'Send to Expo'
             inputs:
               command: 'custom'
-              workingDir: ${{ parameters.workingDir }}
+              workingDir: '$(Pipeline.Workspace)\ExpoApp'
               customCommand: 'run build:android'
 
   - stage: deploy
-    displayName: 'Deploy Expo Apps'
+    displayName: 'Deploy Native Apps'
     dependsOn:
       - buildNative
     condition: succeeded()
@@ -78,11 +95,14 @@ stages:
           runOnce:
             deploy:
               steps:
+                - download: current
+                  artifact: ExpoApp
+
                 - task: Npm@1
                   displayName: 'Deploy to Google Play'
                   inputs:
                     command: 'custom'
-                    workingDir: ${{ parameters.workingDir }}
+                    workingDir: '$(Pipeline.Workspace)\ExpoApp'
                     customCommand: 'run deploy:android'
 
       - deployment:
@@ -94,11 +114,14 @@ stages:
           runOnce:
             deploy:
               steps:
+                - download: current
+                  artifact: ExpoApp
+
                 - task: Npm@1
                   displayName: 'Deploy to Apple App Store'
                   inputs:
                     command: 'custom'
-                    workingDir: ${{ parameters.workingDir }}
+                    workingDir: '$(Pipeline.Workspace)\ExpoApp'
                     customCommand: 'run deploy:ios'
           
   
