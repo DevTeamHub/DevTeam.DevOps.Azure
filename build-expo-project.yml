@@ -43,6 +43,11 @@ stages:
             inputs:
               secureFile: 'google-service-account.json'
 
+          - task: CopyFiles@2
+            inputs:
+              sourceFolder: $(googleServices.secureFilePath)
+              targetFolder: ${{ parameters.workingDir }}
+          
           - publish: ${{ parameters.workingDir }}
             artifact: expo
 
