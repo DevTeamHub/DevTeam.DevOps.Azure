@@ -37,6 +37,12 @@ stages:
               useLegacyPattern: false
               enableTelemetry: true
 
+          - task: DownloadSecureFile@1
+            name: googleServices
+            displayName: 'Download Google Services Config'
+            inputs:
+              secureFile: 'google-service-account.json'
+
           - publish: ${{ parameters.workingDir }}
             artifact: expo
 
