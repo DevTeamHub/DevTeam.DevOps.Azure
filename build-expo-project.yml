@@ -45,7 +45,7 @@ stages:
 
           - task: CopyFiles@2
             inputs:
-              sourceFolder: $(googleServices.secureFilePath)
+              sourceFolder: $(Agent.TempDirectory)
               targetFolder: ${{ parameters.workingDir }}
           
           - publish: ${{ parameters.workingDir }}
