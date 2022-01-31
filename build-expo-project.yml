@@ -60,33 +60,33 @@ stages:
           - script: 'npx expo login -u ${{ parameters.username }} -p ${{ parameters.password }}'
             displayName: 'Expo Login'
 
-          # - task: Npm@1
-          #   displayName: 'Build Android'
-          #   inputs:
-          #     command: 'custom'
-          #     workingDir: ${{ parameters.workingDir }}
-          #     customCommand: 'run build:android'
+          - task: Npm@1
+            displayName: 'Build Android'
+            inputs:
+              command: 'custom'
+              workingDir: ${{ parameters.workingDir }}
+              customCommand: 'run build:android'
 
-          # - task: Npm@1
-          #   displayName: 'Build iOS'
-          #   inputs:
-          #     command: 'custom'
-          #     workingDir: ${{ parameters.workingDir }}
-          #     customCommand: 'run build:ios'
+          - task: Npm@1
+            displayName: 'Build iOS'
+            inputs:
+              command: 'custom'
+              workingDir: ${{ parameters.workingDir }}
+              customCommand: 'run build:ios'
 
-          # - task: Npm@1
-          #   displayName: 'Deploy to Google Play'
-          #   inputs:
-          #     command: 'custom'
-          #     workingDir: ${{ parameters.workingDir }}
-          #     customCommand: 'run deploy:android'               
+          - task: Npm@1
+            displayName: 'Deploy to Google Play'
+            inputs:
+              command: 'custom'
+              workingDir: ${{ parameters.workingDir }}
+              customCommand: 'run deploy:android'               
 
-          # - task: Npm@1
-          #   displayName: 'Deploy to Apple App Store'
-          #   inputs:
-          #     command: 'custom'
-          #     workingDir: ${{ parameters.workingDir }}
-          #     customCommand: 'run deploy:ios'
+          - task: Npm@1
+            displayName: 'Deploy to Apple App Store'
+            inputs:
+              command: 'custom'
+              workingDir: ${{ parameters.workingDir }}
+              customCommand: 'run deploy:ios'
 
                 
           
