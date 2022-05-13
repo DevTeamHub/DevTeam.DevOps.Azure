@@ -5,6 +5,10 @@ parameters:
   type: string
 - name: project
   type: string
+- name: version
+  type: string
+  default: '14.x'
+
 
 stages:
   - stage: ${{ parameters.stageId }}
@@ -16,7 +20,7 @@ stages:
           - task: NodeTool@0
             displayName: 'Install Node.js'
             inputs:
-              versionSpec: '14.x'  
+              versionSpec: ${{ parameters.version }}
           
           - template: publish-npm-project.yml@templates
             parameters:
