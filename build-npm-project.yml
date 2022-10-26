@@ -8,8 +8,9 @@ steps:
 - task: Npm@1
   displayName: '${{ parameters.appName }} - Restore NPM Packages'
   inputs:
-    command: 'install'
+    command: 'custom'
     workingDir: ${{ parameters.workingDir }}
+    customCommand: 'run install'
 
 - task: Npm@1
   displayName: '${{ parameters.appName }} - Build Client'
