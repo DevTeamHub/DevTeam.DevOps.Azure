@@ -1,0 +1,53 @@
+parameters:
+- name: stageId
+  type: string
+- name: displayName
+  type: string
+- name: environment
+  type: string
+- name: buildId
+  type: string
+- name: postgreSQLPath
+  type: string
+- name: project
+  type: string
+- name: username
+  type: string
+- name: password
+  type: string
+- name: host
+  type: string
+- name: port
+  type: string
+- name: databaseName
+  type: string
+- name: backupPath
+  type: string
+
+stages:
+- stage: ${{ parameters.stageId }}
+  displayName: ${{ parameters.displayName }}
+  dependsOn:
+    - build
+  condition: succeeded()
+  jobs:
+    - deployment:
+      displayName: 'Migrate'
+      environment: 
+        name: ${{ parameters.environment }}
+        resourceType: VirtualMachine
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - template: ef-database-postgres-migration.yml@templates 
+                parameters:
+                  buildId: ${{ parameters.buildId }}
+                  postgreSQLPath: ${{ parameters.postgreSQLPath }}
+                  project: ${{ parameters.project }}
+                  username: ${{ parameters.username }}
+                  password: ${{ parameters.password }}
+                  host: ${{ parameters.host }}
+                  port: ${{ parameters.port }}
+                  databaseName: ${{ parameters.databaseName }}
+                  backupPath: ${{ parameters.backupPath }}
