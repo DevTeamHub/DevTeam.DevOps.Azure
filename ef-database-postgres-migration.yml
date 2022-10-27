@@ -20,25 +20,25 @@ parameters:
 
 steps:
 - task: PowerShell@2
-displayName: 'Backup Database'
-inputs:
-  targetType: 'inline' 
-  script: |
-    $postgresPathToBin = ';${{ parameters.postgreSQLPath }}\bin'
-    $postgresPathToData = ';${{ parameters.postgreSQLPath }}\data'
-    $env:Path += $postgresPathToBin + $postgresPathToData
-    $env:PGDATA = $postgresPathToData
-    $env:PGPASSWORD = '${{ parameters.password }}'
-    pg_dump -h ${{ parameters.host }} -p ${{ parameters.port }} -U ${{ parameters.username }} -d ${{ parameters.databaseName }} -a -F c -f ${{ parameters.backupPath }}\${{ parameters.databaseName }}\${{ parameters.buildId }}.bak
+  displayName: 'Backup Database'
+  inputs:
+    targetType: 'inline' 
+    script: |
+      $postgresPathToBin = ';${{ parameters.postgreSQLPath }}\bin'
+      $postgresPathToData = ';${{ parameters.postgreSQLPath }}\data'
+      $env:Path += $postgresPathToBin + $postgresPathToData
+      $env:PGDATA = $postgresPathToData
+      $env:PGPASSWORD = '${{ parameters.password }}'
+      pg_dump -h ${{ parameters.host }} -p ${{ parameters.port }} -U ${{ parameters.username }} -d ${{ parameters.databaseName }} -a -F c -f ${{ parameters.backupPath }}\${{ parameters.databaseName }}\${{ parameters.buildId }}.bak
 
 - task: PowerShell@2
-displayName: 'Apply PostgreSQL Database Migrations'
-inputs:
-  targetType: 'inline' 
-  script: |
-    $postgresPathToBin = ';${{ parameters.postgreSQLPath }}\bin'
-    $postgresPathToData = ';${{ parameters.postgreSQLPath }}\data'
-    $env:Path += $postgresPathToBin + $postgresPathToData
-    $env:PGDATA = $postgresPathToData
-    $env:PGPASSWORD = '${{ parameters.password }}'
-    psql -h ${{ parameters.host }} -p ${{ parameters.port }} -U ${{ parameters.username }} -d ${{ parameters.databaseName }} -a -f $(Pipeline.Workspace)\${{ parameters.project }}\migrations.sql
+  displayName: 'Apply PostgreSQL Database Migrations'
+  inputs:
+    targetType: 'inline' 
+    script: |
+      $postgresPathToBin = ';${{ parameters.postgreSQLPath }}\bin'
+      $postgresPathToData = ';${{ parameters.postgreSQLPath }}\data'
+      $env:Path += $postgresPathToBin + $postgresPathToData
+      $env:PGDATA = $postgresPathToData
+      $env:PGPASSWORD = '${{ parameters.password }}'
+      psql -h ${{ parameters.host }} -p ${{ parameters.port }} -U ${{ parameters.username }} -d ${{ parameters.databaseName }} -a -f $(Pipeline.Workspace)\${{ parameters.project }}\migrations.sql
