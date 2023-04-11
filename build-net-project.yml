@@ -12,11 +12,11 @@ parameters:
 
 steps:
 - ${{ each sdk in parameters.netSdkVersions }}:
-- task: UseDotNet@2
-  displayName: 'Set .Net Core SDK'
-  inputs:
-    version: ${{ sdk }}
-    includePreviewVersions: true
+  - task: UseDotNet@2
+    displayName: 'Set .Net Core SDK'
+    inputs:
+      version: ${{ sdk }}
+      includePreviewVersions: true
 
 - task: DotNetCoreCLI@2
   displayName: 'Restore Nuget Packages'
