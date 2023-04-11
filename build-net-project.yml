@@ -1,5 +1,5 @@
 parameters:
-- name: netSdkVersion
+- name: netSdkVersions
   type: string
 - name: solution
   type: string
@@ -10,10 +10,11 @@ parameters:
   default: ''
 
 steps:
+- ${{ each sdk in parameters.netSdkVersions }}:
 - task: UseDotNet@2
   displayName: 'Set .Net Core SDK'
   inputs:
-    version: ${{ parameters.netSdkVersion }}
+    version: ${{ sdk }}
     includePreviewVersions: true
 
 - task: DotNetCoreCLI@2
