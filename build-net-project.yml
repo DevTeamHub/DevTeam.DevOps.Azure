@@ -1,6 +1,7 @@
 parameters:
 - name: netSdkVersions
-  type: string
+  type: object
+  default: []
 - name: solution
   type: string
 - name: configuration
