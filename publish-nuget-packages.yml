@@ -1,0 +1,26 @@
+parameters:
+- name: key
+  type: string
+- name: configuration
+  type: string
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Create Packages'
+  inputs:
+    command: pack
+    arguments: '--configuration ${{ parameters.configuration }} --output $(Build.ArtifactStagingDirectory)'
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Artifacts'
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)
+    artifactType: 'pipeline'
+    artifactName: 'Packages'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Upload to NuGet'
+  inputs:
+    command: custom
+    custom: nuget
+    arguments: 'push $(Build.ArtifactStagingDirectory)/*.nupkg -s https://api.nuget.org/v3/index.json --api-key ${{ parameters.key }}'
