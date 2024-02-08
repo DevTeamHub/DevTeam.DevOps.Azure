@@ -1,8 +1,6 @@
 parameters:
 - name: netSdkVersion
   type: string
-- name: solution
-  type: string
 - name: configuration
   type: string
 - name: workingDir
@@ -13,48 +11,44 @@ parameters:
 - name: agentOS
   type: string
 
-stages:
-  - stage: build
-    displayName: 'Build'
 
-    jobs:
-      - job: buildBackendJob
-        displayName: 'Build Backend'
-        variables:
-          NUGET_PACKAGES: ${{ parameters.workspace }}/.nuget/packages
+  - job: buildBackendJob
+    displayName: 'Build Backend'
+    variables:
+      NUGET_PACKAGES: ${{ parameters.workspace }}/.nuget/packages
 
-        steps:
-        - task: Cache@2
-          displayName: 'NuGet Cache'
-          inputs:
-            key: 'nuget | "${{ parameters.agentOS }}" | **/packages.lock.json,!**/bin/**,!**/obj/**'
-            restoreKeys: |
-              nuget | "${{ parameters.agentOS }}"
-              nuget
-            path: '$(NUGET_PACKAGES)'
+    steps:
+    - task: Cache@2
+      displayName: 'NuGet Cache'
+      inputs:
+        key: 'nuget | "${{ parameters.agentOS }}" | **/packages.lock.json,!**/bin/**,!**/obj/**'
+        restoreKeys: |
+          nuget | "${{ parameters.agentOS }}"
+          nuget
+        path: '$(NUGET_PACKAGES)'
 
-        - task: NuGetCommand@2
-          displayName: 'NuGet restore'
-          inputs:
-            command: 'restore'
-            restoreSolution: '**/*.sln'
+    - task: NuGetCommand@2
+      displayName: 'NuGet restore'
+      inputs:
+        command: 'restore'
+        restoreSolution: '**/*.sln'
 
-        - task: UseDotNet@2
-          displayName: 'Set .Net Core SDK'
-          inputs:
-            version: ${{ parameters.netSdkVersion }}
-            includePreviewVersions: true
+    - task: UseDotNet@2
+      displayName: 'Set .Net Core SDK'
+      inputs:
+        version: ${{ parameters.netSdkVersion }}
+        includePreviewVersions: true
 
-        - task: DotNetCoreCLI@2
-          displayName: 'Build .NET'
-          inputs:
-            command: build
-            arguments: '--configuration ${{ parameters.configuration }} --no-restore'
-            workingDirectory: ${{ parameters.workingDir }}
-          
-        - task: DotNetCoreCLI@2
-          displayName: 'Testing'
-          inputs:
-            command: test
-            projects: '**/*Tests/*.csproj'
-            arguments: '--configuration ${{ parameters.configuration }}'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build .NET'
+      inputs:
+        command: build
+        arguments: '--configuration ${{ parameters.configuration }} --no-restore'
+        workingDirectory: ${{ parameters.workingDir }}
+      
+    - task: DotNetCoreCLI@2
+      displayName: 'Testing'
+      inputs:
+        command: test
+        projects: '**/*Tests/*.csproj'
+        arguments: '--configuration ${{ parameters.configuration }}'
