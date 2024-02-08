@@ -17,7 +17,7 @@ steps:
   inputs:
     command: custom
     custom: 'tool '
-    arguments: install dotnet-ef
+    arguments: install dotnet-ef --version 7.0
 
 - task: DotNetCoreCLI@2
   displayName: 'Generate DB Migration Script'

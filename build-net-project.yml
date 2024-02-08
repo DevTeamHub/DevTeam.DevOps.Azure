@@ -1,7 +1,6 @@
 parameters:
-- name: netSdkVersions
-  type: object
-  default: []
+- name: netSdkVersion
+  type: string
 - name: solution
   type: string
 - name: configuration
@@ -11,12 +10,11 @@ parameters:
   default: ''
 
 steps:
-- ${{ each sdk in parameters.netSdkVersions }}:
-  - task: UseDotNet@2
-    displayName: 'Set .Net Core SDK'
-    inputs:
-      version: ${{ sdk }}
-      includePreviewVersions: true
+- task: UseDotNet@2
+  displayName: 'Set .Net Core SDK'
+  inputs:
+    version: ${{ parameters.netSdkVersion }}
+    includePreviewVersions: true
 
 - task: DotNetCoreCLI@2
   displayName: 'Restore Nuget Packages'

@@ -3,9 +3,8 @@ parameters:
   type: string
 - name: netFrameworkVersion
   type: string
-- name: netSdkVersions
-  type: object
-  default: []
+- name: netSdkVersion
+  type: string
 - name: solution
   type: string
 - name: configuration
@@ -17,7 +16,7 @@ parameters:
 steps:
 - template: build-net-project.yml@templates
   parameters: 
-    netSdkVersions: ${{ parameters.netSdkVersions }}
+    netSdkVersion: ${{ parameters.netSdkVersion }}
     solution: ${{ parameters.solution }}
     configuration: ${{ parameters.configuration }}
     workingDir: ${{ parameters.workingDir }}
