@@ -3,18 +3,37 @@ parameters:
   type: string
 - name: workingDir
   type: string
+- name: workspace
+  type: string
+- name: agentOS
+  type: string
 
-steps:
-- task: Npm@1
-  displayName: '${{ parameters.appName }} - Restore NPM Packages'
-  inputs:
-    command: 'custom'
-    workingDir: ${{ parameters.workingDir }}
-    customCommand: 'run install'
+stages:
+  - stage: build
+    displayName: 'Build App'
+    jobs:
+      - job: buildFrontendJob
+        displayName: 'Build Web App'
+        variables:
+          YARN_CACHE_FOLDER: ${{ parameters.workspace }}/.yarn
+        
+        steps:
+        - task: Cache@2
+            displayName: 'Cache yarn packages'
+            inputs:
+              key: 'yarn | "${{ parameters.agentOS }}" | ${{ parameters.appName }}/yarn.lock'
+              restoreKeys: |
+                yarn | "${{ parameters.agentOS }}"
+                yarn
+              path: $(YARN_CACHE_FOLDER)
 
-- task: Npm@1
-  displayName: '${{ parameters.appName }} - Build Client'
-  inputs:
-    command: 'custom'
-    workingDir: ${{ parameters.workingDir }}
-    customCommand: 'run build:prod'
+          - script: yarn --frozen-lockfile
+            displayName: 'Restore yarn packages'
+            workingDirectory: ${{ parameters.appName }}
+
+        - task: Npm@1
+          displayName: '${{ parameters.appName }} - Build Client'
+          inputs:
+            command: 'custom'
+            workingDir: ${{ parameters.workingDir }}
+            customCommand: 'run build:prod'
