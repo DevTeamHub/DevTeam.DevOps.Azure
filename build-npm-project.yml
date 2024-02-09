@@ -12,7 +12,7 @@ steps:
 - task: Cache@2
   displayName: 'Cache yarn packages'
   inputs:
-    key: 'yarn | "${{ parameters.agentOS }}" | ${{ parameters.appName }}/yarn.lock'
+    key: 'yarn | "${{ parameters.agentOS }}" | ${{ parameters.workingDir }}/yarn.lock'
     restoreKeys: |
       yarn | "${{ parameters.agentOS }}"
       yarn
@@ -20,7 +20,7 @@ steps:
 
 - script: yarn --frozen-lockfile
   displayName: 'Restore yarn packages'
-  workingDirectory: ${{ parameters.appName }}
+  workingDirectory: ${{ parameters.workingDir }}
 
 - task: Npm@1
   displayName: '${{ parameters.appName }} - Build Client'

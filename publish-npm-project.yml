@@ -5,12 +5,18 @@ parameters:
   type: string
 - name: destination
   type: string
+- name: yarnCacheFolder
+  type: string
+- name: agentOS
+  type: string
 
 steps:
 - template: build-npm-project.yml@templates
   parameters: 
     appName: ${{ parameters.appName }}
     workingDir: ${{ parameters.workingDir }}
+    yarnCacheFolder: ${{ parameters.yarnCacheFolder }}
+    agentOS: ${{ parameters.agentOS }}
 
 - task: PublishPipelineArtifact@1
   displayName: '${{ parameters.appName }} - Publish'
