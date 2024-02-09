@@ -14,39 +14,38 @@ parameters:
 - name: agentOS
   type: string
 
-  steps:
-    - task: Cache@2
-      displayName: 'NuGet Cache'
-      inputs:
-        key: 'nuget | "${{ parameters.agentOS }}" | **/packages.lock.json,!**/bin/**,!**/obj/**'
-        restoreKeys: |
-          nuget | "${{ parameters.agentOS }}"
-          nuget
-        path: '${{ parameters.nugetPackages }}'
+  - task: Cache@2
+    displayName: 'NuGet Cache'
+    inputs:
+      key: 'nuget | "${{ parameters.agentOS }}" | **/packages.lock.json,!**/bin/**,!**/obj/**'
+      restoreKeys: |
+        nuget | "${{ parameters.agentOS }}"
+        nuget
+      path: '${{ parameters.nugetPackages }}'
 
-    - task: NuGetCommand@2
-      displayName: 'NuGet restore'
-      inputs:
-        command: 'restore'
-        restoreSolution: '**/*.sln'
+  - task: NuGetCommand@2
+    displayName: 'NuGet restore'
+    inputs:
+      command: 'restore'
+      restoreSolution: '**/*.sln'
 
-    - ${{ each sdk in parameters.netSdkVersions }}:
-      - task: UseDotNet@2
-        displayName: 'Set .Net Core SDK'
-        inputs:
-          version: ${{ sdk }}
-          includePreviewVersions: true
+  - ${{ each sdk in parameters.netSdkVersions }}:
+    - task: UseDotNet@2
+      displayName: 'Set .Net Core SDK'
+      inputs:
+        version: ${{ sdk }}
+        includePreviewVersions: true
 
-    - task: DotNetCoreCLI@2
-      displayName: 'Build .NET'
-      inputs:
-        command: build
-        arguments: '--configuration ${{ parameters.configuration }} --no-restore'
-        workingDirectory: ${{ parameters.workingDir }}
-      
-    - task: DotNetCoreCLI@2
-      displayName: 'Testing'
-      inputs:
-        command: test
-        projects: '**/*Tests/*.csproj'
-        arguments: '--configuration ${{ parameters.configuration }}'
+  - task: DotNetCoreCLI@2
+    displayName: 'Build .NET'
+    inputs:
+      command: build
+      arguments: '--configuration ${{ parameters.configuration }} --no-restore'
+      workingDirectory: ${{ parameters.workingDir }}
+    
+  - task: DotNetCoreCLI@2
+    displayName: 'Testing'
+    inputs:
+      command: test
+      projects: '**/*Tests/*.csproj'
+      arguments: '--configuration ${{ parameters.configuration }}'
