@@ -1,23 +1,20 @@
 parameters:
-- name: netSdkVersion
-  type: string
+- name: netSdkVersions
+  type: object
+  default: []
 - name: configuration
   type: string
 - name: workingDir
   type: string
   default: ''
+- name: nugetPackages
+  type: string
 - name: workspace
   type: string
 - name: agentOS
   type: string
 
-
-  - job: buildBackendJob
-    displayName: 'Build Backend'
-    variables:
-      NUGET_PACKAGES: ${{ parameters.workspace }}/.nuget/packages
-
-    steps:
+  steps:
     - task: Cache@2
       displayName: 'NuGet Cache'
       inputs:
@@ -25,7 +22,7 @@ parameters:
         restoreKeys: |
           nuget | "${{ parameters.agentOS }}"
           nuget
-        path: '$(NUGET_PACKAGES)'
+        path: '${{ parameters.nugetPackages }}'
 
     - task: NuGetCommand@2
       displayName: 'NuGet restore'
@@ -33,11 +30,12 @@ parameters:
         command: 'restore'
         restoreSolution: '**/*.sln'
 
-    - task: UseDotNet@2
-      displayName: 'Set .Net Core SDK'
-      inputs:
-        version: ${{ parameters.netSdkVersion }}
-        includePreviewVersions: true
+    - ${{ each sdk in parameters.netSdkVersions }}:
+      - task: UseDotNet@2
+        displayName: 'Set .Net Core SDK'
+        inputs:
+          version: ${{ sdk }}
+          includePreviewVersions: true
 
     - task: DotNetCoreCLI@2
       displayName: 'Build .NET'
