@@ -3,6 +3,8 @@ parameters:
   type: string
 - name: workingDir
   type: string
+- name: efVersion
+  type: string
 
 steps:
 - task: DotNetCoreCLI@2
@@ -17,7 +19,7 @@ steps:
   inputs:
     command: custom
     custom: 'tool '
-    arguments: install dotnet-ef --version 7.0
+    arguments: install dotnet-ef --version ${{ parameters.efVersion }}
 
 - task: DotNetCoreCLI@2
   displayName: 'Generate DB Migration Script'

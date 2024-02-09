@@ -3,12 +3,15 @@ parameters:
   type: string
 - name: workingDir
   type: string
+- name: efVersion
+  type: string
 
 steps:
 - template: build-ef-project.yml@templates
   parameters: 
     project: ${{ parameters.project }}
     workingDir: ${{ parameters.workingDir }}
+    efVersion: ${{ parameters.efVersion }}
 
 - task: PublishPipelineArtifact@1
   displayName: '${{ parameters.project }} - Publish'
