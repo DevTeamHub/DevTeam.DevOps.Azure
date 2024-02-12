@@ -12,10 +12,17 @@ parameters:
 - name: certificate
   type: string
 
-steps:                
+steps:
+- task: PowerShell@2
+  displayName: 'Delete Https Binding'
+  inputs:
+    targetType: 'inline'
+    script: |
+      netsh http delete sslcert hostnameport=${{ parameters.appEndpoint }}:443
+
 - task: IISWebAppManagementOnMachineGroup@0
   displayName: 'Prepare IIS Web Site'
-  inputs:            
+  inputs:
     IISDeploymentType: 'IISWebsite'
     ActionIISWebsite: 'CreateOrUpdateWebsite'
     WebsiteName: '${{ parameters.iisAppName }}.${{ parameters.environment }}'
@@ -46,7 +53,7 @@ steps:
             },
             {
                 "protocol":"https",
-                "ipAddress":"",
+                "ipAddress":"*",
                 "hostname":"${{ parameters.appEndpoint }}",
                 "port":"443",
                 "sslThumbprint":"${{ parameters.certificate }}",
@@ -66,7 +73,7 @@ steps:
   inputs:
     webSiteName: ${{ parameters.iisAppName }}.${{ parameters.environment }}
     package: '$(Build.ArtifactStagingDirectory)\${{ parameters.iisAppName }}\${{ parameters.iisAppName }}.zip'
-    removeAdditionalFilesFlag: true 
+    removeAdditionalFilesFlag: true
 
 - task: IISWebAppManagementOnMachineGroup@0
   displayName: 'Start IIS Web Site'
@@ -74,4 +81,3 @@ steps:
     IISDeploymentType: 'IISApplicationPool'
     ActionIISApplicationPool: 'StartAppPool'
     StartStopRecycleAppPoolName: '${{ parameters.iisAppName }}.${{ parameters.environment }}'
-                

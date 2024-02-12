@@ -6,21 +6,26 @@ parameters:
 - name: netSdkVersions
   type: object
   default: []
-- name: solution
-  type: string
 - name: configuration
   type: string
 - name: workingDir
   type: string
   default: ''
+- name: nugetPackages
+  type: string
+- name: workspace
+  type: string
+- name: agentOS
+  type: string
 
 steps:
 - template: build-net-project.yml@templates
   parameters: 
     netSdkVersions: ${{ parameters.netSdkVersions }}
-    solution: ${{ parameters.solution }}
     configuration: ${{ parameters.configuration }}
-    workingDir: ${{ parameters.workingDir }}
+    nugetPackages: ${{ parameters.nugetPackages }}
+    workspace: ${{ parameters.workspace }}
+    agentOS: ${{ parameters.agentOS }}
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish'

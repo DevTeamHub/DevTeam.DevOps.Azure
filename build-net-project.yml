@@ -2,15 +2,34 @@ parameters:
 - name: netSdkVersions
   type: object
   default: []
-- name: solution
-  type: string
 - name: configuration
   type: string
 - name: workingDir
   type: string
   default: ''
+- name: nugetPackages
+  type: string
+- name: workspace
+  type: string
+- name: agentOS
+  type: string
 
 steps:
+- task: Cache@2
+  displayName: 'NuGet Cache'
+  inputs:
+    key: 'nuget | "${{ parameters.agentOS }}" | **/packages.lock.json,!**/bin/**,!**/obj/**'
+    restoreKeys: |
+      nuget | "${{ parameters.agentOS }}"
+      nuget
+    path: '${{ parameters.nugetPackages }}'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
+  inputs:
+    command: 'restore'
+    restoreSolution: '**/*.sln'
+
 - ${{ each sdk in parameters.netSdkVersions }}:
   - task: UseDotNet@2
     displayName: 'Set .Net Core SDK'
@@ -19,16 +38,10 @@ steps:
       includePreviewVersions: true
 
 - task: DotNetCoreCLI@2
-  displayName: 'Restore Nuget Packages'
-  inputs:
-    command: 'restore'
-    projects: '**/*.csproj'
-
-- task: DotNetCoreCLI@2
   displayName: 'Build .NET'
   inputs:
     command: build
-    arguments: '--configuration ${{ parameters.configuration }}'
+    arguments: '--configuration ${{ parameters.configuration }} --no-restore'
     workingDirectory: ${{ parameters.workingDir }}
   
 - task: DotNetCoreCLI@2

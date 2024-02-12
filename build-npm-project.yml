@@ -3,14 +3,24 @@ parameters:
   type: string
 - name: workingDir
   type: string
+- name: yarnCacheFolder
+  type: string
+- name: agentOS
+  type: string
 
 steps:
-- task: Npm@1
-  displayName: '${{ parameters.appName }} - Restore NPM Packages'
+- task: Cache@2
+  displayName: 'Cache yarn packages'
   inputs:
-    command: 'custom'
-    workingDir: ${{ parameters.workingDir }}
-    customCommand: 'run install'
+    key: 'yarn | "${{ parameters.agentOS }}" | ${{ parameters.workingDir }}/yarn.lock'
+    restoreKeys: |
+      yarn | "${{ parameters.agentOS }}"
+      yarn
+    path: ${{ parameters.yarnCacheFolder }}
+
+- script: yarn --frozen-lockfile
+  displayName: 'Restore yarn packages'
+  workingDirectory: ${{ parameters.workingDir }}
 
 - task: Npm@1
   displayName: '${{ parameters.appName }} - Build Client'
