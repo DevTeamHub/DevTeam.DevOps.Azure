@@ -45,7 +45,7 @@ steps:
             bindings:[
             {
                 "protocol":"http",
-                "ipAddress":"",
+                "ipAddress":"*",
                 "hostname":"${{ parameters.appEndpoint }}",
                 "port":"80",
                 "sslThumbprint":"",
